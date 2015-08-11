@@ -52,9 +52,8 @@ class ForwardHost {
         log.info "Forwarding file $fileName using forwarder $f"
         
         //forwardingTimer.schedule(f, 0, 2000)
-	// timer chnaged to 1min
-        //forwardingTimer.schedule(f, 0,60000)
-        forwardingTimer.schedule(f, 0,10000)
+	// timer chnaged to 5sec
+        forwardingTimer.schedule(f, 0,5000)
     
         this.forwarders << f
     }
