@@ -1,0 +1,972 @@
+=========== Changes for Bpipe Version 0.9.8.6 ============
+
+   - fix: errors may printed about files not existing when attempting 
+     to move to trash
+   
+   - fix bpipe jobs not printing jobs after user ctrl-c's out of 
+     run command
+
+   - fix incorrect default for procs_mode variable for torque 
+
+   - fix ugly stack trace error when transform called without arguments 
+
+   - fix failing to escape trailing . in split patterns 
+    
+   - branch.dir now ha a default value so that it is easier to put in reusable
+     pipeline stages 
+    
+   - Ensure walltime gets interpreted as
+     integer even if passed as String / BigDecimal / Long etc 
+    
+   - fix trash option not working in bpipe cleanup 
+    
+   - Fix default output directory not applied to second
+     produce argument if first specifies a directory 
+    
+   - fix produce() with reference only to output.dir causing
+     retry test to incorrectly indicate commands would run again
+    
+   - Fix incorrect file reported for errors when multiple
+     external files loaded, added some comments, removed hard
+     tabs 
+    
+   - fix branch variable not overriding default value of
+     variable specified with var 
+    
+   - Fix files not checked after 'produce' if previously output and then 
+     removed outside of bpipe 
+    
+   - Fix files not checked after 'produce' if
+     previously output and then removed outside of bpipe 
+    
+   - fix 'inputs' variable with double file extension not always resolving
+     only files matching both extensions     
+
+   - fix output() function causing spurious errors about incompatible inputs 
+     when combined with output variable extensions 
+    
+   - fix command not running when explicitly specified by produce() if another
+     implicit output referenced by command 
+    
+   - Support for produce using wildcard based on regex (via ~) 
+    
+   - Add information about total run time to report and command log 
+
+   - support to specify branch filter on command line, to limit
+     running to a specific branch (for testing, usually) 
+    
+   - fix explicit output() combined with produce(...) resulting in
+     inconsistent behavior 
+    
+   - Fix stack traces printed out when errors occur to use actual name of user 
+     scripts instead of groovy generated ones 
+
+   - fix build.gradle not working with existing gradle wrapper 
+    
+   - Implement default behavior for transform with
+     more to() values than from() values instead of failing 
+
+   - Fix output referenced inside check causing check to be
+     skipped / behave incorrectly 
+
+=========== Changes for Bpipe Version 0.9.8.6_rc2 ============
+
+   - Issue 100: report does not accurately reflect repeated and
+     parallel stages 
+    
+   - fix: inputs passed in wrong order to parallel stage after 'produce' when 
+     lexical sorting differs to input order 
+    
+   - enhance: migrated all of Bpipe to use groovy 2.3.4 for JDK1.8 compatibility
+    
+   - Refactoring of basis for pipeline diagrams to solve longstanding bugs 
+    
+   - fix: commands not appearing in html report 
+    
+   - fix: bad log statement causing error if log
+     file fails to appear, better behavior for distributed
+     file systems where command may finish before output file becomes
+     visible on remote node
+
+   - fix: transform() from() to() form can result in Bpipe not detecting 
+     command failure 
+    
+   - fix: pipeline fails if pipeline stage is referenced both with and without
+     'using' 
+    
+   - fix: internal errors (eg: outofmemeory) possibly leaving the Pipeline in 
+     corrupted internal state 
+   
+   - enhance: Make it possible to set custom R executable via
+     bpipe.config 
+    
+   - fix: some status codes from PBS/torque occasionally causing errors in 
+     logs 
+    
+   - fix: local commands don't show pid with bpipe status 
+    
+   - fix: status command showing old jobs and /
+     or failing in situations where command objects are missing /
+     corrupt 
+    
+   - enhance: add thread id to log file (debug)
+    
+   - fix: not all outputs from branches split by file pattern forwarded to
+     downstream stage when number of files differs in each branch 
+    
+   - fix: take into account whole parent hierarchy in calculating
+     total parallelism for computing variable 
+    
+   - enhance: support for sending proc_mode config param to custom executors and
+     CUSTOM executor config attribute 
+    
+   - enhance: Torque/PBS: support for sending procs request using nodes/ppn attribute 
+     instead of procs 
+    
+   - fix: 'forward' failing with cryptic errors when attempting to
+     forward multiple files 
+    
+   - enhance: enabled matching of directory name in split pattern when
+     directory present in pattern 
+
+   - fix: second and later outputs possibly not cleaned up in some 
+     situations of command failure 
+    
+   - fix: branch variables not accepted as required parameters 
+
+   - fix: output does not include branch if no input as base and output 
+     extension syntax used 
+    
+   - fix: R aborting when user hits control-c in some situations 
+    
+   - fix: some complex pipelines starting with list failing with errors 
+    
+   - fix: fixes for PBS Pro executor from Davide 
+   
+   - enhance: support for PBS Pro thanks to Davide Rambaldi 
+
+=========== Changes for Bpipe Version 0.9.8.6_rc ============
+
+   - support for 'load' to work with URLs for loading 
+     scripts remotely
+
+   - fix chr variable created by chr() not considered as satisfying 
+     requires chr:...  
+     
+   - start and stop time not set by local command
+     exector 
+     
+   - restrict use of auto filter to cases where chr actually 
+     in operation 
+     
+   - file() construct sometimes returning paths with .. in them
+     
+   - Add pipeline stage name to printout in bpipe query 
+     
+   - support for multiple file extensions when using $output variable
+     ($output.foo.bar.gz, etc) 
+   
+   - fix incorrect outputs resolved for filter when inputs are 
+     resolved from a relative path leading with "." character 
+     
+   - fix preserve not resolving files specified by different absolute /
+     relative paths to Bpipe's form, (thx Anthony)
+     
+   - Not serializable exception on legacy directories 
+     
+   - Remove legacy feature where output may
+     be inferred from created files: does not behave reliably in
+     parallelized pipelines 
+     
+   - support for multiple "preserve" patterns 
+
+   - fix preserved status not displayed
+     correctly by bpipe query 
+     
+   - support for grouping commands in tool database
+     into 'modules' 
+     
+   - fix syntax errors in tool database 
+     
+   - added igv tools, fix GATK probe, add VEP to tools database 
+
+   - fix binary report files copied as text causing corruption
+     
+   - add stage name to meta data properties saved for each
+     output file 
+    
+   - fix filter sometimes expecting wrong input when
+     file extension supplied 
+     
+   - fix "bpipe run" leaking a tail process each time on OSX 
+
+   - support for generating reports using arbitrary groovy
+     code in a separate script 
+     
+   - add tools and versions to meta data stored in 
+     output properties 
+     
+   - fix status for SLURM displaying Torque in output 
+     
+   - fix possible conflicting output names on multiple branches 
+     when nested branches cascade without intervening stages 
+
+   - add support for referencing output graph in reports 
+     
+   - transform should be able to
+     match whole file name, fix incorrect input can be resolved
+     inside transform() to() construct 
+    
+   - display running time and pending output in response to 
+     bpipe query 
+   
+   - Add procs to LSF executor 
+     
+   - refactored a lot of executor stuff to remove duplicated
+     code, plus to allow for recording start of execution time
+     separate to start of queuing time 
+
+   - fix GB ignored as key for memory 
+
+   - support to use ${output(...)} in commands instead of produce  
+
+   - support for adding jars to classpath via bpipe.config 
+     (libs="foo.jar:bar.jar...")
+
+   - fix requires at pipeline stage level no longer working because 
+     overriden by top level requires function 
+
+   - experimental: multithread startup to ammeliorate long delays 
+     when file system is slow
+
+   - make it possible to remove the cwd option from lsf
+     executor (see google group)
+
+   - use -e instead of -eo for LSF since it is compatible with OpenLava 
+     
+   - ability to use multiple extensions for 'input' variable file 
+     extensions, eg: $input.foo.bar.csv returns files ending in 
+     '.foo.bar.csv'
+
+   - fix input with file extension not requiring match on first 
+     character in some cases 
+     
+   - fix problem in some weird cases where object has null class 
+     
+   - prevent errors when running in test mode with explicit 
+     notifications sent in pipeline to 'file' channel
+     
+   - switch to SimpleTemplateEngine because GStringTemplateEngine is not
+     observing classpath of added libraries, only core groovy
+     libraries 
+     
+   - fix output directory set by command line
+     resulting in inputs not correctly recognised in 2nd and
+     later stages of pipeline 
+     
+   - fix required inputs using exact path instead of file name 
+     
+  
+========== Changes for Bpipe Version 0.9.8.6_beta_3 ============
+
+   - support for setting check message without failing or succeeding 
+   - explicitly (check.message = "...." in otherwise clause) 
+
+   - new check report to send / write a summary of all checks 
+     as HTML (bpipe run -R checks ..., 
+     send report('checks.html') ...)
+    
+   - documentation now available to reports based on user
+     templates 
+
+   - "utils" now provided to templates for generic
+     utilities (escape, todo: documentation) 
+     
+   - Ensure full stack trace is
+     logged in bpipe log when missing function encountered 
+     
+   - make produce() with directory use that directory rather 
+     than coerce to default output dir 
+
+   - added new supported commands to default help display 
+     
+   - fix parameters passed in by command line not resolvable in
+     templates 
+
+   - support 'send report(...) to file: <file name>'
+     syntax 
+     
+   - fix subject line used incorrect in SMTP notifications
+     
+   - inputs not being correctly checked to be provided when specified 
+     at root level 
+
+   - don't display exception info when failure is due to
+     value missing from specified inputs via 'inputs ...' statement
+     
+   - support for 'requires' at top level outside of pipeline 
+     definition 
+     
+   - improve wording and display of error when required value is
+     missing 
+
+   - fix templates not able to see all classes available on
+     classpath
+
+   - removed all forms of throttling of R sessions (should now be
+     unnecessary) as it can form a bottleneck in certain
+     scenarios 
+
+
+========== Changes for Bpipe Version 0.9.8.6_beta_2 ============
+
+   - avoid warnings due to project properties (thanks Davide) 
+
+   - refactored email functionality to use user configurable
+     templates 
+
+   - fix notifications for pipeline finished saying
+     pipeline failed when it didn't 
+
+   - support for displaying information about checks at end of pipeline 
+
+   - more information in SMTP notifications, including checks 
+     
+   - Added option to override all checks for cases where there are 
+     very many that have failed 
+     
+   - changed unknown communication provider to be a warning instead 
+     of a pipeline terminating exception.
+
+   - fix relative symbolic link to Bpipe not resolving properly 
+     under Mac/OSX 
+
+   - fix possibility of commands sometimes
+     not being cleaned up (add pause before terminating Bpipe,
+     after terminating child processes) 
+
+   - Fix Slurm not returning failure exit code when
+     job cancelled via bpipe stop (causing outputs not to be
+     cleaned up)
+
+   - Added "checks" command and "override" command to display and 
+     override checks respectively
+
+   - Fix transforms sometimes applying in such a way
+     as to add branch name with no period separating them from
+     the rest of the file name (regression)
+     
+   - fix transforms producing null outputs when no period in 
+     input file name  (regression)
+     
+   - support for rendering pipeline diagrams as SVG 
+
+   - support for specifying pipeline stages to ignore 
+     in diagrams via noDiagram="..." in bpipe.config (annotations to 
+     come in the future) 
+
+   - fix diagrams generated incorrectly if 'segment'
+     command used 
+
+   - fix documentation failing to generate unless script has a
+     relative or absolute path prefixing it 
+
+   - some tweaks to avoid rare cases double
+     dots appearing in file names with transform 
+
+   - 'succeed' should terminate parent branch when all child
+     branches terminated via succeed 
+
+   - support for running a pipeline "until" a specified stage
+     ( -u)  
+
+   - support for send to use HTML templates instead of
+     inline HTML 
+     
+   - support for 'succeed' and 'fail' to share
+     'send' syntax to generate an email or IM along with the
+     termination of the branch 
+
+   - fix slurm executor sometimes
+     treating slurm stdout and stderr temp files 
+     as real outputs of pipeline 
+
+   - Fix space inserted when withFlag used with flags 
+     ending with "=" 
+     
+   - fix variables and functions loaded via 'load' not available until 
+     pipeline launched (inside run { } ) 
+     
+   - allow global resource limits (as supported by -l flag 
+     to bpipe) to be specified in bpipe.config as well 
+   - 
+   - support for sending emails and
+     instant message notifications explicitly 
+     from script, using syntax: send text 'hello' to gtalk, 
+     and more advanced forms (documentation to come) 
+
+   - support for using
+     explicit regex pattern to split files to parallel 
+     paths (as opposed to simplified pattern syntax) 
+     just add ~ to pattern 
+     
+   - fix (very rare) possibility for duplicate file
+     names when referencing 'inputs' 
+     variable 
+     
+   - added support for matching numbers
+     in input splitting patterns ('#') 
+
+   - added support for gradle wrapper 
+     
+   - added gradle wrapper for easier building
+     (now just use gradlew instead - of gradle, and it
+     self downloads) 
+     
+   - fix custom resources not enforced when
+     provided as map 
+
+   - fix default build to autodetect Gridgain
+     jars and compile without if not 
+     found 
+
+   - get mail.jar from Maven so default checkout compiles 
+     
+   - changes to allow "single" queue to handle
+     multiple tasks (vlsci) 
+
+   - fix 'bpipe status' displaying incorrect command for SLURM, PBS
+     possibly others
+     
+========== Changes for Bpipe Version 0.9.8.6_beta_1 ============
+
+   - fixed file(...) function sometimes returning file object
+     for "<file>/." 
+
+   - experimental feature: supply closure with ".using(...)" for lazy 
+     evaluation, allowing reference to runtime pipeline variables in 
+     configuration of pipeline stages
+
+   - initial implementation of a 'bpipe status' command, to show exactly
+     what is currently running 
+
+   - Ability to explicitly cause a
+     branch to either fail or succeed prematurely 
+     (via "fail" and "succeed" commands) 
+
+   - added support to transform a
+     single file pattern to multiple targets 
+
+   - ability to configure and customize reports from bpipe.config 
+     (custom names, etc.), and to send by email when email notifications
+     configured 
+
+   - allow "procs" to be specified as integer in
+     resource manager config 
+
+   - fix first line of log file sometimes not showing when using 
+     "bpipe log ..." 
+
+   - "bpipe query" not working on files in non default output
+      directories (eg: specified with output.dir=....) 
+
+   - more graceful / better handling of errors
+     that cause the script to not parse or load at all 
+
+   - support for finding bpipe.config in the same directory as
+     the pipeline script (which might be different to the
+     directory that bpipe is running in) 
+
+   - better handling of exception when probing tools in tool database 
+
+   - new feature: allow for muliply by Map to set an explicit
+     mapping of branch names to inputs 
+
+   - special behavior for accompanies when dealing with 
+     transforms: always adds
+     extension to end of file rather than replacing 
+
+   - allow requires to specify complete file name instead of just
+     extension 
+
+   - allow resolution of 'load' files relative to the pipeline
+     script itself so that it is easy to maintain a pipeline
+     file and ancillary files in the same directory 
+
+========== Changes for Bpipe Version 0.9.8.5 ============
+
+-   fix output.dir not working if transform annotation used 
+
+-   fix silly mistake causing load external stages to fail 
+
+-   fix loading a pipeline stage from within a loaded pipeline stage not
+    working
+
+-   added ability to set branch level variables that are carried forward
+    through the pipeline via branch.<name> = "something" syntax
+
+-   Fix output sometimes not fully flushed when running pipelines using
+    resource managers
+
+-   support for using arbitrary lists for parallelization over any  
+    list of items
+
+-   fix msg writing output during probes (causing double output in 
+    certain situations)
+
+-   when an output that is specified as an absolute / relative file that exists, 
+    fix not seeing it in dependency graph
+
+-   better file names when output extension occurs in combination with 
+    introduction of branch name (foo.chr1.csv instead of foo.txt.chr1.csv)
+    NOTE: in rare situations this might cause output file names to change,
+    thus may cause outputs to get recomputed for existing pipelines (in rare cases)
+
+-   allow command line region to override chr() within pipeline
+
+-   fix command configuration sometimes not displaying name 
+
+-   slightly better description of command for specifying report 
+    template (see Google Group discussion)
+
+-   fix R code failing when last line contains certain syntax
+
+-   Enable specifying file name for reports (Patch from Ido Tamir,
+    thank you!)
+
+-   fix problems when multiple implicit outputs computed from same input file 
+    (output1.foo and output2.foo end up the same file)
+
+-   handle incorrect report template much more nicely than a giant stack
+    trace
+
+========== Changes for Bpipe Version 0.9.8.4.1 ============
+
+-   fix middle parallel section causing spurious error if no inputs provided
+    at start of pipeline
+
+-   fix error when pipeline starts with parallel section and adds a
+    subsequent stage (regression)
+
+-   fix file splitting patterns not working properly for very specific case
+    of a split wildcard (%) followed by 2 chars
+
+
+========== Changes for Bpipe Version 0.9.8.4 ============
+
+-    fix __bpipe_lazy_resource_threads__ appearing in
+     output when commands fail instead of real value of $threads
+
+-    fix __bpipe_lazy_resource_threads__ appearing in
+     command log instead of real value of $thread
+
+-    prevented tools being probed more often than needed
+
+-    moved throttling of command execution into separate
+     class, applied throttling to tool probing so as to lessen chances
+     of exhausting threads or file handles when running with 
+     large numbers of inputs and highly parallel pipelines
+
+-    fix log.warn causing any UNKNOWN status code return
+     from PBS/Torque to exit with error instead of retrying
+
+-    fix filter transforms sometimes basing output file
+     on wrong input 
+
+-    preliminary SLURM support via Andrew Lonsdale (thanks!)
+
+-    when a command is configured with to use a specific
+     number of procs, that should override the magic $threads
+     variable value
+
+-    PBS / Torque support not sending memory config for
+     queues other than 'batch' or 'smp'
+
+-    hack: add ability to put extra classes into
+     $BPIPE_LIB/extra-lib.jar for use in pipeline script
+
+-    don't convert outputs containing paths to output
+     folder
+
+-    further support for inputs that are directories -
+     prevent checking of timestamp of directory, search the 
+     full output tree instead of just immediate inputs to stage 
+     when a directory input is requested
+
+-    fix glob outputs not recognized as already created
+     when in explicitly set output folder
+
+-    fix "using" construct causing diagrams to fail
+
+-    fixed diagram failure on nested parallel section, and
+     when a parallel section is the root element in the pipeline
+
+-    fix diagrams failing with exception stack trace when
+     pipeline is split by chromosome
+
+-    fix diagrams not working when only a single stage
+     defined in pipeline
+
+-    add support for transform(".xml") to(".csv") { }
+     style syntax (experimental)
+
+-    better error message for referencing undefined function
+
+-    fixed branch names including directory portions of
+     input file paths when split on files from other directory
+
+-    ensure variables can be overriden from the command
+     line
+
+-    show all commands when test mode aborts a multi
+     command
+
+-    option to show only output from single thread with
+     bpipe log -t
+
+
+========== Changes for Bpipe Version 0.9.8.3 ============
+
+
+-    fix input not resolved by from / input ext when
+     reference embedded in nested
+
+-    fix %bin% expansion incorrect when tool command is
+     part of the full path containing the tool itself - eg:
+     /usr/local/bwa/bwa-0.5.9/bwa
+
+-    fix possible double period in output file name (regression)
+
+-    fix references to output.dir causing outputs to be
+     inferred even when no outputs actually decided yet for
+     stage (eg: before produce / transform / filter, etc.).
+
+-    fix backslashes in file paths causing invalid output
+     paths on Windows
+
+-    fixed failures when files without extensions created
+     as outputs / inputs
+
+-    run commands using -e option with bash so that failure
+     of any command within script results in abort
+
+-    nicer error message when a filter encounters the
+     situation that no inputs were provided
+
+-    fix transform producing same output as input when
+     output file of same type as input
+
+-    add support for closure as value for variable default
+     to compute default value at runtime, prevent referencing  
+     unless actually needed (useful eg: if the default should be 
+     an input when not provided)
+
+-    attempt to fix out-of-order execution of pipelines
+     that start with list and append stages after
+
+-    support for "requires" to specify required parameters
+     for a pipeline stage
+
+-    support for multiple paths in BPIPE_LIB
+
+-    support for script files in BPIPE_LIB (in addition
+     to folders of scripts)
+
+-    support for ordering of execution of modules in
+     BPIPE_LIB
+
+-    fix output files not merged correctly when multiple
+     levels of nested
+     parallel segments end at same point
+
+-    updated to add withFlag for more stringent test case
+
+-    changed build to use manually downloaded gridgain lib
+     (GridGain pulled their repo support :-( )
+
+
+========== Changes for Bpipe Version 0.9.8.1 ============
+
+-  fix double spaced output
+
+-  fix input.size() and inputs.size() throwing exceptions
+
+-  fix potential incorrect output inferred in filter operation,
+   causing 'expected output not found' error in some filter 
+   scenarios
+
+========== Changes for Bpipe Version 0.9.8.1 ============
+
+-    Fix race condition causing occasional null pointer
+     exception, making param_nested_parallel test fail
+
+-    fix exception when using bpipe preserve
+
+-    fix potential leading semicolon when executing command
+
+-    fix for incorrect input inferred by filter if actual
+     input used different to those supplied by previous stage
+
+-    fixed regression causing '..' in filenames from output
+     extension that operates like transform
+
+-    fix double period in inferred output names when no
+     explicit filter / transform present
+
+-    fixed dependencies working incorrectly with produce; stage skipped even if
+     actual inferred / used input was newer than actual inferred output
+
+-    fix multiple instances of Bpipe running R scripts
+     clashing other
+
+-    support for "diagramOrientation="vertical" in
+     bpipe.config to change orientation of diagrams
+
+-    fix diagrams not generating correctly for some
+     pipeline architectures
+
+-    fix commands used to generate outputs sometimes
+     displaying as "..." when using "bpipe query"
+
+-    improvements to tool database - more links, better
+     descriptions, etc.
+
+-    to prevent some of the massive output 
+     that comes from large pipelines when re-executing, buffer
+     messages unless a stage actually does something.
+
+-    support for producing custom reports, named by
+     command line
+
+-    added source for software schedule report
+
+-    fix input ext on output with index referencing
+     wrong output
+
+-    fix cleanup not removing directory
+
+-    fix glob on output folder not working
+
+-    fixed output explicitly specified in produce() to be
+     in folder still remapped to default output dir
+
+-    added alternative bpipe runner that runs in background
+
+-    fixed filterInputs still not working right with chr()
+     behavior now defaults based on whether the input files contain
+     chromosome references rather than always filtering
+
+
+========== Changes for Bpipe Version 0.9.8 ============
+ 
+-   fixed problems with quoted args becoming unquoted during launch
+    (so eg: bpipe execute 'foo + bar' would not work)
+
+-   fixed 'bpipe retry' not working with quoted arguments
+    in commands
+
+-   fixed filter sometimes incorrectly refusing to allow output files that
+    should work basd on used inputs
+
+-  fix $input1 not resolving in commands if there is only one input
+
+-  fix no information about outputs printed when too many outputs
+
+-  added 'withFlag' function on $inputs, $inputs.<ext> variables for easily
+   adding multiple inputs with the same flag (eg: ${inputs.bam.withFlag("-I")})
+
+-  strip leading spaces from commands when joining lines together for execution
+   (prevent whitespace bloat in command log)
+
+-  jobid now prepended in history file
+
+-  support to retry specified job from history using
+   bpipe retry <jobid>
+
+-  prevent bpipe commands that fail with invalid
+   arguments from getting logged in history
+
+-  don't log full path to bpipe executable in history
+   file (breaks if bpipe location / version changes)
+
+-   fixed files failing to get cleaned up if same file was
+    previously cleaned up + added warning if cleanup fails
+
+-   fixed filter followed by from potentially resolving
+    its own stage output as input
+
+-   fix for mt issue around pipeline inputs (causing
+    parallel_same_stage_outputs test to fail if you run
+    it many times) - regression from beta 3/4
+
+-   support for @intermediate and @accompanies
+    (experimental) annotations
+
+-   fixed failure to cleanup outputs that are inferred from output file
+    extensions rather than transform / filter / produce when pipeline 
+    stage fails
+
+-   fixed multiple references to multiinput properties
+    resulting in duplicated / missed outputs
+
+-   fixed reference to inputs variable followed by
+    reference to input variable returning wrong results
+
+-   fixed later stages not resolving inputs from non-final
+    stages in prior nested parallel segments
+
+=========== Changes for Bpipe Version 0.9.8_beta_5 ============
+
+-   more fixes to make config{} work properly
+    fixed 'config' not working / failing to execute
+    commands
+-   fix parallel branches created from file pattern split
+    not using split files as basis for outputs sometimes
+
+=========== Changes for Bpipe Version 0.9.8_beta_4 ============
+
+-   support for multiple split characters in input matching patterns
+
+-   support for config closure to enable config across multiple commands or
+    when using "multi"
+
+-   slightly better messaging when skipping command due to existence, not
+    based on time stamp
+
+-   fix display of output to stderr when version probe command fails
+    - send to log instead
+
+-   experimental chaining of from and filter / transform
+
+-   fix "from" causing original inputs not to be queried for files in some
+    situations
+
+-   fix "filter" nested in "from" failing to infer correct output when output 
+    based on input other than input in "from" clause
+
+-   fix possible exception when using $output.prefix
+
+-   fixed second and later stages in nested parallel segments not always
+    resolving correct inputs
+
+-   fix attempts to use "split" in input variables failing (regression)
+
+-   added support for use of "region" variable without genome or chr splitting
+    to allow generic pipeline stages that can work with or without regions 
+    specified
+    
+-   added command line option ("-L") to specify default value of region variable
+    
+-   fixed "from" to match multiple inputs if used in form from("*.txt") etc.
+
+-   Added example for how to run paired end reads
+
+-   fix output extension causing wrong / confusing behavior when incombination
+    with a filter and unexpected input order
+
+-   fix bpipe command leaving out eclipse folder from classpath
+
+=========== Changes for Bpipe Version 0.9.8_beta_3 ============
+
+-   Updated underlying groovy implementation to Groovy 2.1
+
+-   Add "pre-existing" label to display of outputs that 
+    weren't genereated by the current run
+
+-   fix error when creating File objects from input /
+    output
+
+-   support for using numbered outputs with file extensions
+    (eg: $output2.txt)
+
+-   fixed outputs sometimes being recreated unnecessarily
+    when multiple commands inside transform/filter
+
+-   support for implicit 'thread' variable for auto
+    allocating threads based on known concurrency
+
+-   fixed duplicate output files for $output1,
+    $output2,... if pipeline has no input files
+
+-   fix jobs not always cleaned up from global job table
+
+-   support for referencing a particular input with a
+    particular extension using "$input<n>.<ext>"
+
+-   fixed double period appearing in some file names when
+    using filter
+
+-   fixed order of output from "glob" depending on the
+    vagaries of the file system or java internals by
+    sorting it
+
+-   made 'from' conform to the convention of multiple
+    inputs of same time bumping to next actual input
+    instead of returning the same over and over
+
+=========== Changes for Bpipe Version 0.9.8_beta_2 ============
+
+-   fixed multi not failing pipeline when an asynchronous
+    command fails
+
+-   making filter() conform to the same behavior as
+    transform(): when a filter type is repeated, it moves
+    to the next input (see google group discussion -
+    https://groups.google.com/forum/?fromgroups=#!topic/bpipe-discuss/G58ExlG2Vgo
+
+-   fixed error when reporting notification failures
+    to user
+
+-   fixed output extensions not working correctly with
+    filter when multiple filters supplied
+
+-   fix multi not actually parallelizing properly in
+    some cases
+
+-   fix regression in 'from' not accepting list (added
+    test)
+
+-   fixed from with multiple arguments ignoring first
+    argument
+
+-   fixed deadlock condition in using "multi" in certain
+    cases
+
+=========== Changes for Bpipe Version 0.9.8_beta_1 ============
+
+-   More flexible model for concurrency management, enabling
+    management of any kind of resource. Introduction of
+    new keyword "uses" to declare resource usage for a block
+    and command line options (-m, -l, -n) to control different
+    aspects of concurrency
+
+-   Complete re-implementation of dependency analysis so that
+    Bpipe understands the depedency graph and can perform
+    transitive dependency analysis to allow rerunning piplines
+    without rebuilding unnecessary intermediate dependencies.
+    (See Issue #2, http://code.google.com/p/bpipe/issues/detail?id=2)
+    Includes support for new command line commands, 
+    "bpipe query", "bpipe cleanup", and "bpipe preserve" to 
+    display and manage dependencies, as well as annotations,
+    "@preserved" to declare dependencies that should not be
+    deleted in a "cleanup". 
+
+-   support for new 'glob' function available within
+    pipeline stages to facilitate pipelines that need to
+    use wild card matches on input files.
+
+-   Annotations can be used with lower case now. Upper case 
+    still works, but some people feel @transform, @filter,
+    etc. looks nicer.
+
+-   Support for parallelizing by chromosome on existing
+    files already split by chromosome. If your input files
+    are split and named by chromosome, you can use 
+    filterInputs parameter to make the existing
+    files be used for inputs to the parallelization 
+    eg. chr(1..2, filterInputs:true) 
+
+-   Many various bug fixes and improvements to messaging,
+    behaviour and output.
+
+

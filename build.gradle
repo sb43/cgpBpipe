@@ -1,0 +1,106 @@
+apply plugin: 'eclipse'
+apply plugin: 'groovy'
+
+project.ext {
+    VERSION="0.9.8.6"
+    STAGE="build/stage/bpipe-$VERSION"
+}
+
+repositories {
+    flatDir(dirs: file('local-lib'))
+    mavenCentral()
+
+    // Unfortunately it seems GridGain have disabled their maven repository
+    // Therefore users need to now manually download the GridGain jar file
+    // maven { url "http://www.gridgainsystems.com/maven2" }
+}
+
+dependencies {
+    groovy group: 'org.codehaus.groovy', name: 'groovy', version: '2.3.4'
+    compile 'org.codehaus.gpars:gpars:0.12'
+
+    compile files(fileTree(dir:'local-lib', includes:['*.jar']))
+
+    // In case GridGain ever revive their Maven repo ...
+    // compile ('org.gridgain:gridgain:4.0.2c') { transitive = false }
+
+    compile ('javax.mail:mail:1.4.5')
+
+    // Batik
+    compile 'org.apache.xmlgraphics:batik-util:1.7@jar'
+    compile 'org.apache.xmlgraphics:batik-css:1.7@jar'
+    compile 'org.apache.xmlgraphics:batik-dom:1.7'
+    compile 'org.apache.xmlgraphics:batik-svg-dom:1.7@jar'
+    compile 'org.apache.xmlgraphics:batik-svggen:1.7@jar'
+    compile 'org.apache.xmlgraphics:batik-awt-util:1.7@jar'
+
+    compile ('com.hazelcast:hazelcast-all:2.1.2') { transitive = false }
+    testCompile group: 'junit', name: 'junit', version: '4.8.2'
+
+}
+
+// Check for presence of GridGain library - if not available, exclude the
+// source files that depend on it
+if(!new File("local-lib").listFiles().find { it.name =~ /gridgain.*.jar/ }) {
+    println ""
+    println "=" * 80
+    println "No Gridgain library found. Gridgain support disabled in this build.".center(80)
+    println "=" * 80
+    println ""
+    sourceSets { main { groovy {
+        srcDir 'src'
+            exclude '**/Gridgain*.groovy'
+    } } }
+}
+
+jar {
+    from configurations.compile.grep {
+        !(it.name in ["mail.jar"]) && !it.name.startsWith("gridgain") && !it.name.startsWith("hazelcast")
+    }.collect { 
+        it.isDirectory() ? it : zipTree(it) 
+    }
+}
+
+task stage(dependsOn: jar) << {
+  ant.mkdir(dir: STAGE)
+  ant.mkdir(dir: "$STAGE/bin")
+  ant.mkdir(dir: "$STAGE/lib")
+  ant.copy(todir: "$STAGE/bin") {
+    ant.fileset(dir: 'bin', includes: "**")
+  }
+  new File(STAGE+'/bin/bpipe').text = 
+          new File("bin/bpipe").text.replaceAll("VERSION=0.0.0","VERSION=$VERSION").replaceAll("BUILDDATE=0","BUILDDATE="+String.valueOf(System.currentTimeMillis()))
+
+  ant.copy(todir: "$STAGE/lib") {
+    // do not distribute mail.jar due to license
+    ant.fileset(dir: 'local-lib', includes: "*.jar", 
+        excludes: "mail.jar,gridgain-*.jar,hazelcast-*.jar,batik*.jar,commons-cli*.jar,jgraphx.jar,smack-*.jar,xml-*.jar,gpars*.jar,jsr*.jar,extra166y*.jar,groovy-all-*.jar")
+    ant.fileset(dir: 'build/libs', includes: "bpipe.jar")
+  }
+
+  ["templates","html"].each { type ->
+      ant.mkdir(dir: "$STAGE/$type")
+      ant.copy(todir: "$STAGE/$type") {
+        ant.fileset(dir: "src/main/$type/bpipe", includes: "*")
+      }
+  }
+
+  ant.copy(todir: "$STAGE") {
+    ant.fileset(dir: 'src/main/config', includes: "bpipe.config")
+  }
+}
+
+task dist(dependsOn: stage) << {
+  ant.tar(destfile: "build/bpipe-${VERSION}.tar") {
+    ant.fileset(dir: "build/stage", includes: "bpipe-${VERSION}/lib/**", excludes:"**/*.swp")
+    ant.fileset(dir: "build/stage", includes: "bpipe-${VERSION}/bpipe.config", excludes:"**/*.swp")
+    ant.fileset(dir: "build/stage", includes: "bpipe-${VERSION}/html/**", excludes:"**/*.swp")
+    ant.fileset(dir: "build/stage", includes: "bpipe-${VERSION}/templates/**", excludes:"**/*.swp")
+    ant.tarfileset(dir: "build/stage", filemode:"755", includes: "bpipe-${VERSION}/bin/**", excludes:"**/*.swp")
+  }
+  ant.gzip(destfile:"build/bpipe-${VERSION}.tar.gz", src: "build/bpipe-${VERSION}.tar")
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '1.0'
+}

@@ -1,0 +1,114 @@
+/*
+ * Copyright (c) Murdoch Childrens Research Institute and Contributers
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *
+ * Redistributions of source code must retain the above copyright notice, this
+ * list of conditions and the following disclaimer.
+ *
+ * Redistributions in binary form must reproduce the above copyright notice, this
+ * list of conditions and the following disclaimer in the documentation and/or
+ * other materials provided with the distribution.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+package bpipe
+
+import java.util.Iterator;
+import groovy.util.logging.Log;
+
+/**
+ * Extends {@link PipelineInput} to handle multiple inputs.
+ * <p>
+ * Where {@link PipelineInput} tries to always return just a single
+ * input that matches what the user expects, {@link MultiPipelineInput} 
+ * resolves all available inputs that match what the user expects and returns
+ * them separated by spaces.
+ * 
+ * @author ssadedin
+ */
+@Log
+class MultiPipelineInput extends PipelineInput implements Iterable {
+    
+    MultiPipelineInput(def input, List<PipelineStage> stages) {
+		super(input,stages)	
+	}
+	
+	/**
+	 * Maps to all of the values separated by spaces
+	 */
+    @Override
+	public String mapToCommandValue(def values) {
+		def result = Utils.box(values)
+        addResolvedInputs(result)
+        return result.collect { String.valueOf(it) }.join(' ')
+	}
+
+	String toString() {
+       List boxed = Utils.box(super.@input).unique()
+       for(String i in boxed) {
+           if(!this.resolvedInputs.contains(i))
+               this.resolvedInputs.add(i)
+       }
+       addFilterExts(boxed)
+       
+       return boxed.join(" ")
+    }
+    
+    def propertyMissing(String name) {
+        
+        if(this.resolvedInputs)
+            this.resolvedInputs.clear()
+            
+        def result = super.propertyMissing(name)
+        if(result) {
+            def mp = new MultiPipelineInput(this.resolvedInputs.clone(), stages)
+            mp.parent = this
+            mp.resolvedInputs = this.resolvedInputs
+            mp.currentFilter = this.currentFilter
+            if(result instanceof PipelineInput)
+                mp.extensionPrefix = result.extensionPrefix
+            log.info("My resolved inputs: " + this.resolvedInputs.hashCode() + " child resolved inputs " + mp.resolvedInputs.hashCode())
+            return mp
+        }
+    }
+    
+    /**
+     * Return the inputs with each one prefixed by the specified flag
+     * <p>
+     * If the flag ends with "=" then no space is included between the flag
+     * and the option. Otherwise, a space is included.
+     * 
+     * @param flag name of flag, including dashes (eg: "-I" or "--input")
+     * @return  string containing each matching input prefixed by the flag and a space
+     */
+    public String withFlag(String flag) {
+       List boxed = Utils.box(super.@input).unique()
+       addResolvedInputs(boxed)
+       if(flag.endsWith("=")) {
+           return boxed.collect { "${flag}${it}" }.join(" ") 
+       }
+       else
+         return boxed.collect { "$flag $it" }.join(" ")
+    }
+    
+	@Override
+	public Iterator iterator() {
+		return Utils.box(super.@input).listIterator()
+	}
+    
+    public int size() {
+        return Utils.box(super.@input).size()
+    }
+}
