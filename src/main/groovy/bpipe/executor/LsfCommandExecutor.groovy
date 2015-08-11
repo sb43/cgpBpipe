@@ -72,7 +72,7 @@ class LsfCommandExecutor implements CommandExecutor {
 
     private static String CMD_OUT_FILENAME = "cmd.out"
 
-    private static String CMD_ERR_FILENAME = "cmd%I.err"
+    private static String CMD_ERR_FILENAME = "cmd.%I.err"
 
 	/**
 	 * Start the execution of the command in the LSF environment.
