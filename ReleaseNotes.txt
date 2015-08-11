@@ -1,3 +1,14 @@
+
+=========== Changes for Bpipe Version 0.9.8.6.cgp1 ============
+
+		- updated lsf sub with conditions
+
+		- lsf bsub checking time changed to 5sec -
+
+		- All file handlers closed in Forwarder.groovy
+
+		- added LSBjobindex as postfix parameter to err file name
+
 =========== Changes for Bpipe Version 0.9.8.6 ============
 
    - fix: errors may printed about files not existing when attempting 
@@ -968,5 +979,4 @@
 
 -   Many various bug fixes and improvements to messaging,
     behaviour and output.
-
 
