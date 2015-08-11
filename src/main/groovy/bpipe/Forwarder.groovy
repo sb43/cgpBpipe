@@ -221,34 +221,46 @@ class Forwarder extends TimerTask {
 		    def job_array=out.toString().split('\n').collect{it as String}
 		    for ( line in job_array) {
 			    counter++
+					if (counter == 1) {
+						continue
+					}
 			    def job_line = line.split().collect{it as String}
-			    if(!(new File(FileNameExit).exists()) && job_line[2] == "EXIT" && counter > 1 ) {
-			    		new File(FileNameExit).write("1")			
+			    if(!(new File(FileNameExit).exists()) && job_line[2] == "EXIT" ) {
+			    		def exit_file = new File(FileNameExit)			
+			    		exit_file.write("1")			
 			      	LsfExit[(line)] = 1
 			      	state_e = 1
+							exit_file.close()
 			    }
-			    if(job_line[2] != null && job_line[2] != "EXIT" && job_line[2] != "DONE" && counter >1) {
-			      state_r = 1
-			      //one job evidence sufficient to keep bpipe running
-			      break
-			    }
-			    if(job_line[2] == "DONE" && counter >1) {
-			      state_d = 1
-			    }
+					else{ 
+						if(job_line[2] != null && job_line[2] != "DONE" ) {
+							state_r = 1
+							//one job evidence sufficient to keep bpipe running
+							continue
+						}
+						else {
+							state_d = 1
+						}
+					}
 		    }
 		    // Create file with exit status non zero if we find one of the array job has non exit status		
 		    if( (new File(FileNameExit).exists()) && !state_r) {
 		      log.info "Exit status written in $FileName"
-		      new File(FileName).write("1")
+		      def error_file = new File(FileName)
+		      error_file.write("1")
+					error_file.close()
 		      // print jobs with EXIT status 
 		      LsfExit.each {
 		          	println it.key
 			  }
+					
 		    }
 		    // Create file with exit status zero if we did not see job status EXIT and all the jobs are completed		
 		    if(!(new File(FileNameExit).exists()) && !state_r && state_d) {
 		      log.info "Exit status written in $FileName"
-		      new File(FileName).write("0")
+		      def error_file = new File(FileName).write("0")
+		      error_file.write("0")
+					error_file.close()
 		    }
 		}
 	}
