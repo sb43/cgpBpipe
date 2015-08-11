@@ -1,4 +1,8 @@
 
+=========== Changes for Bpipe Version 0.9.8.6.cgp2 ============
+
+		- remove explicit file.close as it doesn't exists in groovy :-)			
+
 =========== Changes for Bpipe Version 0.9.8.6.cgp1 ============
 
 		- updated lsf sub with conditions

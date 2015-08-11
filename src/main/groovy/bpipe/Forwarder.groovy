@@ -77,11 +77,11 @@ class Forwarder extends TimerTask {
    //  }
    
     Forwarder(File f, OutputStream out, String jobid) {
-	forward(f,out,jobid)
+			forward(f,out,jobid)
     }
     void forward(File file, OutputStream out, String jobid) {
-	bsubJobid = jobid
-        synchronized(files) {
+		bsubJobid = jobid
+    synchronized(files) {
             files << file
 	    // get file name without extension
 	    CMD_EXIT_FILE=file.absolutePath.lastIndexOf('.').with {it != -1 ? file.absolutePath[0..<it] : file.absolutePath}
@@ -212,9 +212,7 @@ class Forwarder extends TimerTask {
 			throw new PipelineError("Failed to start command:\n\n$bjobsCmd")
 		}
 		if(err && exitValue == 0) {
-			
 			log.info "bsub job : $bsubJobid job not yet started"
-			
 		}
 		// parse bjobs output
 		if(out && exitValue == 0) {
@@ -226,17 +224,14 @@ class Forwarder extends TimerTask {
 					}
 			    def job_line = line.split().collect{it as String}
 			    if(!(new File(FileNameExit).exists()) && job_line[2] == "EXIT" ) {
-			    		def exit_file = new File(FileNameExit)			
-			    		exit_file.write("1")			
-			      	LsfExit[(line)] = 1
-			      	state_e = 1
-							exit_file.close()
+								new File(FileNameExit).write("1")			
+								state_e = 1
 			    }
 					else{ 
 						if(job_line[2] != null && job_line[2] != "DONE" ) {
 							state_r = 1
 							//one job evidence sufficient to keep bpipe running
-							continue
+							break
 						}
 						else {
 							state_d = 1
@@ -246,9 +241,7 @@ class Forwarder extends TimerTask {
 		    // Create file with exit status non zero if we find one of the array job has non exit status		
 		    if( (new File(FileNameExit).exists()) && !state_r) {
 		      log.info "Exit status written in $FileName"
-		      def error_file = new File(FileName)
-		      error_file.write("1")
-					error_file.close()
+		      new File(FileName).write("1")
 		      // print jobs with EXIT status 
 		      LsfExit.each {
 		          	println it.key
@@ -258,9 +251,7 @@ class Forwarder extends TimerTask {
 		    // Create file with exit status zero if we did not see job status EXIT and all the jobs are completed		
 		    if(!(new File(FileNameExit).exists()) && !state_r && state_d) {
 		      log.info "Exit status written in $FileName"
-		      def error_file = new File(FileName).write("0")
-		      error_file.write("0")
-					error_file.close()
+		      new File(FileName).write("0")
 		    }
 		}
 	}
