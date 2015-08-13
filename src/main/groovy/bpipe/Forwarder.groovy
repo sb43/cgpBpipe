@@ -226,12 +226,12 @@ class Forwarder extends TimerTask {
 			    if(!(new File(FileNameExit).exists()) && job_line[2] == "EXIT" ) {
 								new File(FileNameExit).write("1")			
 								state_e = 1
+								LsfExit[(line)] = 1
 			    }
 					else{ 
 						if(job_line[2] != null && job_line[2] != "DONE" ) {
 							state_r = 1
 							//one job evidence sufficient to keep bpipe running
-							break
 						}
 						else {
 							state_d = 1
