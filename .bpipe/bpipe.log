@@ -1,0 +1,4 @@
+bpipe.Runner	[1]	INFO	|12:10:03 Starting 
+bpipe.Runner	[1]	INFO	|12:10:03 OS: Linux (3.2.0-75-generic) Java: 1.7.0_25 Vendor: Oracle Corporation 
+bpipe.Runner	[1]	INFO	|12:10:03 Initializing plugins ... 
+bpipe.Config	[1]	INFO	|12:10:03 No plugins directory found: /nfs/users/nfs_s/sb43/scripts/cgpBpipe/.bpipe/plugins 
