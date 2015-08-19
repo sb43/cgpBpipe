@@ -1,3 +1,6 @@
+=========== Changes for Bpipe Version 0.9.8.6.cgp3.0.1 ============
+
+		- Added -XX:+UseSerialGC - serial garbage collector
 
 =========== Changes for Bpipe Version 0.9.8.6.cgp3 ============
 
