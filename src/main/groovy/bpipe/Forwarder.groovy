@@ -229,7 +229,7 @@ class Forwarder extends TimerTask {
 								LsfExit[(line)] = 1
 			    }
 					else{ 
-						if(job_line[2] != null && job_line[2] != "DONE" ) {
+						if(job_line[2] != "DONE" && job_line[2] != "EXIT" ) {
 							state_r = 1
 							//one job evidence sufficient to keep bpipe running
 						}
@@ -257,6 +257,6 @@ class Forwarder extends TimerTask {
 	}
 	return [state_e, state_r, state_d]
     }
-// end of bjobs methods
+// end of bjobs method
 
 }
