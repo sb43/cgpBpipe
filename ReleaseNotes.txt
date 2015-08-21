@@ -1,3 +1,8 @@
+
+=========== Changes for Bpipe Version 0.9.8.6.cgp3.0.2 ============
+
+		- Updated if condition when all the jobs have status exit
+
 =========== Changes for Bpipe Version 0.9.8.6.cgp3.0.1 ============
 
 		- Added -XX:+UseSerialGC - serial garbage collector
