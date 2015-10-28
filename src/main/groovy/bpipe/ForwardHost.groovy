@@ -52,9 +52,8 @@ class ForwardHost {
         log.info "Forwarding file $fileName using forwarder $f"
         
         //forwardingTimer.schedule(f, 0, 2000)
-	// timer chnaged to 5sec
-        forwardingTimer.schedule(f, 0,5000)
-    
+				// timer chaged to 1min
+        forwardingTimer.schedule(f, 0,60000)
         this.forwarders << f
     }
     
@@ -63,9 +62,7 @@ class ForwardHost {
      */
     void stopForwarding() {
         this.forwarders*.cancel()
-        
         log.info "Flushing outputs for forwarders: $forwarders"
-        
         // Now run them all one last time to flush any last contents
         this.forwarders*.flush()
     }
