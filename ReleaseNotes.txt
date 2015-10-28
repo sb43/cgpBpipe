@@ -1,4 +1,8 @@
 
+=========== Changes for Bpipe Version 0.9.8.6.cgp3.0.3 ============
+
+		- Raised LSF query time to 1min in ForwardHost.groovy
+
 =========== Changes for Bpipe Version 0.9.8.6.cgp3.0.2 ============
 
 		- Updated if condition when all the jobs have status exit
